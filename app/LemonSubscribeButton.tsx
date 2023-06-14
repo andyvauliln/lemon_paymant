@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "~/components/ui/button";
 import { axios } from "~/lib/axios";
 import { useAuth } from "~/providers/auth";
-import { CreateCheckoutResponse } from "./api/payment/subscribe/route";
+import { CreateCheckoutResponse } from "../api/payment/subscribe/route";
 
 export default function LemonSubscribeButton() {
   const { isAuthenticated, user } = useAuth();

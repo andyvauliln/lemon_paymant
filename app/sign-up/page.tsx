@@ -7,7 +7,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { axios } from "~/lib/axios";
 import { useAuth } from "~/providers/auth";
-import { SignUpResponse } from "../api/auth/sign-up/route";
+import { SignUpResponse } from "../../api/auth/sign-up/route";
 
 export default function SignUp() {
   const [input, setInput] = React.useState({ email: "", password: "" });

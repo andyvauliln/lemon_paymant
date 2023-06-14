@@ -8,7 +8,7 @@ export default function ManageSubscription(props: {
   userId: string;
   isCanceled: boolean;
   currentPeriodEnd?: number;
-  updatePaymentMethodURL: string;
+  updatePaymentMethodURL: string | undefined;
 }) {
   const { userId, isCanceled, currentPeriodEnd, updatePaymentMethodURL } = props;
   const router = useRouter();
