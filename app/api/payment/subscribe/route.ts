@@ -23,20 +23,32 @@ export async function POST(request: Request) {
       await client.listAllVariants({ productId: process.env.LEMONS_SQUEEZY_PRODUCT_ID })
     ).data[0];
 
+    console.log(variant);
+    const data = {
+      type: "checkouts",
+      attributes: { checkout_data: { email: user.email, custom: [user.id] } },
+      relationships: {
+        store: {
+          data: { type: "stores", id: process.env.LEMON_SQUEEZY_STORE_ID },
+        },
+        variant: { data: { type: "variants", id: variant.id } },
+      },
+    };
+    console.log(data);
     const checkout = (await axios.post(
       "https://api.lemonsqueezy.com/v1/checkouts",
       {
-        data: {
-          type: "checkouts",
-          attributes: { checkout_data: { email: user.email, custom: [user.id] } },
-          relationships: {
-            store: { data: { type: "stores", id: process.env.LEMON_SQUEEZY_STORE_ID } },
-            variant: { data: { type: "variants", id: variant.id } },
-          },
-        },
+        data: data,
       },
-      { headers: { Authorization: `Bearer ${process.env.LEMONSQUEEZY_API_KEY}` } }
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+        },
+      }
     )) as CreateCheckoutResult;
+
+    console.log(checkout, "data");
+    
 
     return NextResponse.json({ checkoutURL: checkout.data.attributes.url }, { status: 201 });
   } catch (err: any) {

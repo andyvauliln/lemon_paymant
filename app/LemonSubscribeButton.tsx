@@ -6,7 +6,7 @@ import { axios } from "~/lib/axios";
 import { useAuth } from "~/providers/auth";
 import { CreateCheckoutResponse } from "./api/payment/subscribe/route";
 
-export default function SubscribeButton() {
+export default function LemonSubscribeButton() {
   const { isAuthenticated, user } = useAuth();
   const router = useRouter();
 

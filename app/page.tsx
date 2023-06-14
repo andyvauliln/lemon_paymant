@@ -1,8 +1,11 @@
+
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import "reflect-metadata";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
+// import HelioSubscribeButton from "./HelioSubscribeButton";
+import LemonSubscribeButton from "./LemonSubscribeButton";
 import ManageSubscription from "./ManageSubscription";
-import SubscribeButton from "./SubscribeButton";
 
 export default async function Home() {
   const cookiesList = cookies();
@@ -25,7 +28,11 @@ export default async function Home() {
             updatePaymentMethodURL={updatePaymentMethodURL}
           />
         ) : (
-          <SubscribeButton />
+            <>
+              <LemonSubscribeButton />
+              {/* <HelioSubscribeButton /> */}
+
+            </>
         )}
       </div>
     </div>

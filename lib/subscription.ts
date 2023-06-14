@@ -2,6 +2,8 @@ import { prisma } from "~/prisma/db";
 import { client } from "./lemons";
 
 export async function getUserSubscriptionPlan(userId: string) {
+  console.log(userId, "data");
+
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
@@ -20,20 +22,27 @@ export async function getUserSubscriptionPlan(userId: string) {
     user.currentPeriodEnd &&
     user.currentPeriodEnd.getTime() + 86_400_000 > Date.now();
 
-  const subscription = await client.retrieveSubscription({ id: user.subscriptionId });
-
-  // If user has a pro plan, check cancel status on Stripe.
+  let subscription = null;
   let isCanceled = false;
 
-  if (isPro && user.subscriptionId) {
-    isCanceled = subscription.data.attributes.cancelled;
+  if (user.subscriptionId) {
+    subscription = await client.retrieveSubscription({
+      id: user.subscriptionId,
+    });
+
+    if (isPro) {
+      isCanceled = subscription.data.attributes.cancelled;
+    }
   }
+
+  // If user has a pro plan, check cancel status on Stripe.
 
   return {
     ...user,
     currentPeriodEnd: user.currentPeriodEnd?.getTime(),
     isCanceled,
     isPro,
-    updatePaymentMethodURL: subscription.data.attributes.urls.update_payment_method,
+    updatePaymentMethodURL:
+      subscription?.data?.attributes?.urls?.update_payment_method,
   };
 }
